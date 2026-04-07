@@ -1,1 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Plush Store v3 - Com Cupons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <style>
+        :root {
+            --primary: #bc13fe;
+            --accent: #00f2ff;
+            --bg: #0b0b0e;
+            --error: #ff4d4d;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .app-container {
+            background: #151518;
+            border: 1px solid #333;
+            border-radius: 20px;
+            width: 1100px;
+            /* Mudamos 'height' para 'min-height' e 'max-height' */
+            min-height: 600px; 
+            max-height: 90vh; /* Ocupa no máximo 90% da altura da tela */
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            overflow: hidden; /* Mantém as barras de rolagem apenas dentro das colunas */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        /* Isso garante que cada coluna tenha sua própria rolagem se os itens crescerem */
+        .col { 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            box-sizing: border-box;
+            overflow-y: auto; /* Permite rolar para baixo dentro da coluna */
+        }
+
+        .col-select {
+            border-right: 1px solid #222;
+        }
+
+        .col-preview {
+            background: #0d0d0f;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .col-cart {
+            background: #000;
+            border-left: 1px solid #222;
+        }
+
+        /* Lista de Produtos */
+        #lista-produtos {
+            flex-grow: 1;
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 10px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .prod-option {
+            padding: 12px;
+            border-bottom: 1px solid #111;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .prod-option:hover {
+            background: #1a1a1a;
+        }
+
+        .prod-option.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Foto */
+        .photo-frame {
+            width: 100%;
+            height: 350px;
+            background: #1a1a1e;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Inputs e Botões */
+        input,
+        .search {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #1a1a1e;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-pay {
+            background: var(--accent);
+            color: black;
+            margin-top: auto;
+        }
+
+        /* Seção de Cupom */
+        .coupon-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #111;
+            border-radius: 10px;
+            border: 1px dashed #444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <div class="col col-select">
+            <h3 style="color: var(--primary); margin: 0;">Mega Catálogo</h3>
+            <p style="font-size: 0.7rem; color: #666;">1000 OPÇÕES DISPONÍVEIS</p>
+            <input type="text" class="search" id="filtro" placeholder="Pesquisar..." onkeyup="filtrar()">
+            <div id="lista-produtos"></div>
+        </div>
+
+        <div class="col col-preview">
+            <div class="photo-frame">
+                <img id="main-img" src="" style="display: none;">
+                <p id="placeholder-text" style="color: #444;">Selecione uma pelúcia</p>
+            </div>
+            <h2 id="view-nome" style="margin: 10px 0; text-align: center;">---</h2>
+            <p id="view-preco" style="color: var(--accent); font-size: 1.8rem; margin: 0;">R$ 0,00</p>
+
+            <div style="width: 100%; margin-top: 20px;">
+                <label style="font-size: 0.7rem; color: #888;">QUANTIDADE:</label>
+                <input type="number" id="qtd" value="1" min="1"
+                    style="width: 70px; display: block; margin-bottom: 10px;">
+                <button class="btn btn-add" onclick="adicionar()">Adicionar à Sacola</button>
+            </div>
+        </div>
+
+        <div class="col col-cart">
+            <h3>Minha Sacola</h3>
+            <div id="carrinho-itens" style="flex-grow: 1; overflow-y: auto; font-size: 0.85rem;">
+            </div>
+
+            <div class="coupon-box">
+                <label style="font-size: 0.65rem; color: var(--accent); font-weight: bold;">CUPOM DE DESCONTO</label>
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    <input type="text" id="cupom-input" placeholder="Código" style="font-size: 0.8rem;">
+                    <button onclick="aplicarCupom()"
+                        style="background: #333; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">OK</button>
+                </div>
+                <div id="cupom-msg" style="font-size: 0.65rem; margin-top: 5px;"></div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #888;">
+                    <span>Subtotal:</span>
+                    <span id="subtotal-val">R$ 0,00</span>
+                </div>
+                <div id="desc-row"
+                    style="display: none; justify-content: space-between; font-size: 0.9rem; color: var(--error);">
+                    <span>Desconto:</span>
+                    <span id="desc-val">- R$ 0,00</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold; margin-top: 5px;">
+                    <span>Total:</span>
+                    <span id="total-val">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="btn btn-pay" onclick="alert('Finalizando venda real...')">Pagar Agora</button>
+        </div>
+    </div>
+
+    <script>
+        const itens = [];
+        const nomes = ["Naruto", "Pikachu", "Luffy", "Goku", "Pochita", "Batman", "Spider-Man", "Stitch", "Yoda", "Mario"];
+        const tipos = ["Pelúcia Gigante", "Chibi Kawaii", "Edição Especial", "Chaveiro Soft"];
+
+        // Gerador de 1000 itens
+        for (let i = 1; i <= 1000; i++) {
+            const n = nomes[Math.floor(Math.random() * nomes.length)];
+            const t = tipos[Math.floor(Math.random() * tipos.length)];
+            itens.push({
+                id: i,
+                nome: `${t} ${n} #${i}`,
+                preco: parseFloat((Math.random() * 150 + 40).toFixed(2)),
+                foto: `https://loremflickr.com/400/400/plushie,toy?lock=${i}`
+            });
+        }
+
+        let selecionado = null;
+        let totalVenda = 0;
+        let desconto = 0;
+        const cupons = { "ANIME10": 0.10, "OFF20": 0.20, "POCHITA50": 0.50 };
+
+        function renderizar(lista) {
+            const container = document.getElementById('lista-produtos');
+            container.innerHTML = "";
+            lista.forEach(item => {
+                const d = document.createElement('div');
+                d.className = 'prod-option';
+                d.innerText = item.nome;
+                d.onclick = () => {
+                    selecionado = item;
+                    document.querySelectorAll('.prod-option').forEach(el => el.classList.remove('active'));
+                    d.classList.add('active');
+                    document.getElementById('placeholder-text').style.display = 'none';
+                    const img = document.getElementById('main-img');
+                    img.src = item.foto;
+                    img.style.display = 'block';
+                    document.getElementById('view-nome').innerText = item.nome;
+                    document.getElementById('view-preco').innerText = "R$ " + item.preco.toFixed(2).replace('.', ',');
+                };
+                container.appendChild(d);
+            });
+        }
+
+        function filtrar() {
+            const busca = document.getElementById('filtro').value.toLowerCase();
+            renderizar(itens.filter(i => i.nome.toLowerCase().includes(busca)));
+        }
+
+        function adicionar() {
+            if (!selecionado) return alert("Selecione um item!");
+            const qtd = parseInt(document.getElementById('qtd').value);
+            const sub = selecionado.preco * qtd;
+            totalVenda += sub;
+
+            const row = document.createElement('div');
+            row.style.padding = "8px 0";
+            row.style.borderBottom = "1px solid #111";
+            row.innerHTML = `<b>${qtd}x</b> ${selecionado.nome} <br> <span style="color:var(--accent)">R$ ${sub.toFixed(2)}</span>`;
+            document.getElementById('carrinho-itens').appendChild(row);
+
+            atualizarValores();
+        }
+
+        function aplicarCupom() {
+            const cod = document.getElementById('cupom-input').value.toUpperCase().trim();
+            const msg = document.getElementById('cupom-msg');
+
+            if (totalVenda === 0) return alert("Carrinho vazio!");
+
+            if (cupons[cod]) {
+                desconto = totalVenda * cupons[cod];
+                msg.innerText = "Cupom aplicado!";
+                msg.style.color = "var(--accent)";
+                document.getElementById('desc-row').style.display = 'flex';
+                atualizarValores();
+            } else {
+                msg.innerText = "Código inválido.";
+                msg.style.color = "var(--error)";
+            }
+        }
+
+        function atualizarValores() {
+            document.getElementById('subtotal-val').innerText = "R$ " + totalVenda.toFixed(2).replace('.', ',');
+            document.getElementById('desc-val').innerText = "- R$ " + desconto.toFixed(2).replace('.', ',');
+            document.getElementById('total-val').innerText = "R$ " + (totalVenda - desconto).toFixed(2).replace('.', ',');
+        }
+
+        renderizar(itens);
+    </script>
+</body>
+
+</html>
