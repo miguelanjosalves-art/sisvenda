@@ -1,318 +1,174 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopee Clone - Plush Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --shopee-orange: #ee4d2d;
-            --shopee-bg: #f5f5f5;
-            --text-main: #222;
-            --text-secondary: #757575;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--shopee-bg);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .shopee-app {
-            width: 100%;
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: 280px 1fr 350px;
-            gap: 15px;
-            padding: 20px;
-            height: 95vh;
-        }
-
-        /* Coluna Lateral: Filtros e Pesquisa */
-        .sidebar {
-            background: white;
-            padding: 15px;
-            border-radius: 4px;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-        }
-
-        .shopee-logo {
-            color: var(--shopee-orange);
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #dbdbdb;
-            border-radius: 2px;
-            outline: none;
-        }
-
-        /* Coluna Central: Vitrine de Produtos */
-        .feed {
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 10px;
-            padding-right: 5px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 2px;
-            transition: transform 0.1s;
-            cursor: pointer;
-            border: 1px solid transparent;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            transform: translateY(-2px);
-            border: 1px solid var(--shopee-orange);
-            z-index: 1;
-        }
-
-        .product-img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .product-name {
-            font-size: 13px;
-            line-height: 16px;
-            height: 32px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            margin-bottom: 8px;
-        }
-
-        .product-price {
-            color: var(--shopee-orange);
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .badge-promo {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #ffe91f;
-            color: var(--shopee-orange);
-            padding: 2px 5px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        /* Coluna Direita: Checkout / Carrinho */
-        .cart-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-        }
-
-        .cart-header {
-            border-bottom: 1px solid #efefef;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        #cart-items {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-        }
-
-        .cart-item {
-            display: flex;
-            gap: 10px;
-            font-size: 13px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #f5f5f5;
-        }
-
-        .btn-shopee {
-            background-color: var(--shopee-orange);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 2px;
-            font-weight: 500;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn-shopee:hover { background-color: #f05d40; }
-
-        .total-section {
-            background: #fffcf5;
-            padding: 15px;
-            border: 1px solid #f1e9cf;
-        }
-
-        /* Personalização do Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
-    </style>
+    <title>SisVenda - Sistema de Gestão</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="shopee-app">
+    <!-- Tela de Login -->
+    <div id="login-container" class="box-container">
+        <h2>🔒 Acesso ao SisVenda</h2>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Digite admin" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite 1234" required>
+            </div>
+            <button type="button" class="btn" onclick="simularLogin()">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Painel Principal -->
+    <div id="main-panel" class="main-container hidden">
         <aside class="sidebar">
-            <div class="shopee-logo">🛍️ Shopee Plush</div>
-            <div class="search-box">
-                <input type="text" id="filtro" placeholder="Buscar produtos..." onkeyup="filtrar()">
-            </div>
-            <p style="font-size: 12px; color: #888;">FILTROS</p>
-            <hr style="border: 0; border-top: 1px solid #eee;">
-            <div style="font-size: 14px; color: var(--text-secondary);">
-                <p>✓ Menor Preço</p>
-                <p>✓ Frete Grátis</p>
-            </div>
+            <h3>📊 SisVenda</h3>
+            <ul>
+                <li onclick="mostrarSecao('clientes')">📝 Cadastrar Cliente</li>
+                <li onclick="mostrarSecao('produtos')">📦 Cadastrar Produto</li>
+                <li onclick="mostrarSecao('catalogo')">🛍️ Catálogo</li>
+                <li onclick="mostrarSecao('vendas')">🛒 Registrar Venda</li>
+                <li onclick="mostrarSecao('historico')">📜 Histórico</li>
+                <li class="logout" onclick="logout()">👋 Sair</li>
+            </ul>
         </aside>
 
-        <main class="feed" id="vitrine">
-            </main>
+        <main class="content">
+            <header>
+                <h2>Painel de Controle</h2>
+                <span class="user-badge">Olá, admin</span>
+            </header>
 
-        <section class="cart-panel">
-            <div class="cart-header">Meu Carrinho</div>
-            <div id="cart-items">
-                <p style="text-align: center; color: #999; font-size: 13px; margin-top: 20px;">
-                    Seu carrinho está vazio
-                </p>
-            </div>
+            <!-- Seção Clientes -->
+            <section id="clientes" class="form-section hidden">
+                <h3>📝 Cadastro de Cliente</h3>
+                <form id="client-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Nome Completo</label>
+                            <input type="text" placeholder="Ex: Juliana Silva" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Data de Nascimento</label>
+                            <input type="date" required>
+                        </div>
+                        <div class="input-group">
+                            <label>E-mail</label>
+                            <input type="email" placeholder="juliana@email.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label>CPF</label>
+                            <input type="text" placeholder="123.456.789-00" required>
+                        </div>
+                        <div class="input-group text-full">
+                            <label>Telefone</label>
+                            <input type="tel" placeholder="(41) 99999-1234" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Salvar Cliente</button>
+                </form>
+            </section>
 
-            <div class="coupon-box" style="margin-bottom: 15px;">
-                <input type="text" id="cupom-input" placeholder="Cupom Shopee" 
-                       style="width: 70%; padding: 8px; border: 1px solid #ddd;">
-                <button onclick="aplicarCupom()" style="padding: 8px; cursor: pointer;">Aplicar</button>
-            </div>
+            <!-- Seção Produtos -->
+            <section id="produtos" class="form-section hidden">
+                <h3>📦 Cadastro de Produto</h3>
+                <form id="product-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Nome do Produto</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Preço</label>
+                            <input type="number" step="0.01" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Imagem (URL)</label>
+                            <input type="text" placeholder="https://...jpg" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Categoria</label>
+                            <select required>
+                                <option value="Roupas">Roupas</option>
+                                <option value="Calçados">Calçados</option>
+                                <option value="Eletrônicos">Eletrônicos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Salvar Produto</button>
+                </form>
+            </section>
 
-            <div class="total-section">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span style="color: #757575;">Subtotal</span>
-                    <span id="subtotal-val">R$ 0,00</span>
+            <!-- Seção Catálogo -->
+            <section id="catalogo" class="produtos-section hidden">
+                <h3>🛍️ Catálogo de Produtos</h3>
+                <div class="filtros">
+                    <input type="text" placeholder="Buscar produto..." class="busca">
+                    <select class="categoria">
+                        <option value="">Todas categorias</option>
+                        <option value="Roupas">Roupas</option>
+                        <option value="Calçados">Calçados</option>
+                        <option value="Eletrônicos">Eletrônicos</option>
+                    </select>
+                    <button class="btn">Filtrar</button>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
-                    <span>Total</span>
-                    <span id="total-val" style="color: var(--shopee-orange);">R$ 0,00</span>
+                <div class="produtos-container">
+                    <!-- Exemplo de produto -->
+                    <div class="produto-card">
+                        <img src="https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-13-1.jpg" alt="iPhone 13" class="produto-img">
+                        <h4>iPhone 13</h4>
+                        <p class="preco">R$ 4.999,00</p>
+                        <button class="btn-comprar">🛒 Comprar</button>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <button class="btn-shopee" style="margin-top: 15px;" onclick="finalizarVenda()">FINALIZAR COMPRA</button>
-        </section>
+            <!-- Seção Vendas -->
+            <section id="vendas" class="form-section hidden">
+                <h3>🛒 Registrar Venda</h3>
+                <form id="sale-form">
+                    <div class="input-group">
+                        <label>ID do Cliente</label>
+                        <input type="number" required>
+                    </div>
+                    <button type="submit" class="btn">Registrar Venda</button>
+                </form>
+            </section>
+
+            <!-- Seção Histórico -->
+            <section id="historico" class="form-section hidden">
+                <h3>📜 Histórico de Vendas</h3>
+                <ul class="historico-lista">
+                    <li>Venda #1 - Cliente: Juliana - Total: R$ 200,00 - Data: 25/05/2026</li>
+                </ul>
+            </section>
+        </main>
     </div>
 
     <script>
-        let produtos = [];
-        let carrinho = [];
-        let subtotal = 0;
-        let cupomDesconto = 0;
-
-        async function carregarProdutos() {
-            try {
-                const res = await fetch('http://127.0.0.1:5000/produtos');
-                produtos = await res.json();
-                renderizarVitrine(produtos);
-            } catch (e) {
-                console.error("Erro ao carregar banco!");
-            }
-        }
-
-        function renderizarVitrine(lista) {
-            const container = document.getElementById('vitrine');
-            container.innerHTML = lista.map(p => `
-                <div class="product-card" onclick="adicionarAoCarrinho(${p.id})">
-                    <div class="badge-promo">OFF</div>
-                    <img src="${p.foto}" class="product-img">
-                    <div class="product-info">
-                        <div class="product-name">${p.nome}</div>
-                        <div class="product-price">R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
-                        <div style="font-size: 10px; color: #757575; margin-top: 5px;">321 vendidos</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function adicionarAoCarrinho(id) {
-            const p = produtos.find(item => item.id === id);
-            carrinho.push(p);
-            atualizarCarrinhoUI();
-        }
-
-        function atualizarCarrinhoUI() {
-            const container = document.getElementById('cart-items');
-            subtotal = carrinho.reduce((sum, item) => sum + item.preco, 0);
-            
-            if(carrinho.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #999;">Vazio</p>`;
+        function simularLogin() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            if(u === 'admin' && p === '1234') {
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('main-panel').classList.remove('hidden');
             } else {
-                container.innerHTML = carrinho.map(item => `
-                    <div class="cart-item">
-                        <img src="${item.foto}" width="40" height="40">
-                        <div>
-                            <div style="font-weight: 500">${item.nome}</div>
-                            <div style="color: var(--shopee-orange)">R$ ${item.preco.toFixed(2)}</div>
-                        </div>
-                    </div>
-                `).join('');
+                alert('🚨 Usuário ou senha incorretos!');
             }
-            
-            document.getElementById('subtotal-val').innerText = `R$ ${subtotal.toFixed(2)}`;
-            document.getElementById('total-val').innerText = `R$ ${(subtotal - cupomDesconto).toFixed(2)}`;
         }
-
-        function filtrar() {
-            const termo = document.getElementById('filtro').value.toLowerCase();
-            renderizarVitrine(produtos.filter(p => p.nome.toLowerCase().includes(termo)));
+        function logout() {
+            document.getElementById('main-panel').classList.add('hidden');
+            document.getElementById('login-container').classList.remove('hidden');
         }
-
-        async function finalizarVenda() {
-            if(carrinho.length === 0) return alert("Carrinho vazio!");
-            
-            const res = await fetch('http://127.0.0.1:5000/venda', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ total: subtotal - cupomDesconto })
-            });
-            const data = await res.json();
-            alert("Pedido realizado com sucesso na Shopee Plush!");
-            location.reload();
+        function mostrarSecao(secao) {
+            document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(secao).classList.remove('hidden');
         }
-
-        carregarProdutos();
     </script>
 </body>
 </html>
